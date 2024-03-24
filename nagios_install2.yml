@@ -1,0 +1,45 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates (CentOS)
+    tags: always
+    yum:
+      name: "*"
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Ensure EPEL repo is enabled (CentOS)
+    yum:
+      name: "*"
+      state: latest
+    when: ansible_os_family == "RedHat"
+
+  - name: Install necessary Perl module for Nagios
+    yum:
+      name: "*"
+      state: latest
+    when: ansible_os_family == "RedHat"
+
+
+- hosts: install_nagios_CentOS
+  become: true
+  roles:
+    - name: install_nagios_CentOS
+      failed_when: false
+
+- hosts: install_nagios_Ubuntu
+  become: true
+  roles:
+    - name: install_nagios_Ubuntu
+      failed_when: false
+

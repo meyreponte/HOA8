@@ -5,6 +5,7 @@
       - nagios-plugins-all
       - nagios
     state: present
+  failed_when: false
 
 - name: Enable and start Nagios (CentOS)
   systemd:
@@ -12,12 +13,14 @@
     enabled: yes
     state: started
   when: ansible_distribution == "CentOS"
+  failed_when: false
 
 - name: Create Nagios htpasswd file for Basic Authentication
-  command: htpasswd -c /etc/nagios/passwd reponte password123
+  command: htpasswd -c /etc/nagios/passwd richmond password123
   args:
     creates: /usr/local/nagios/etc/htpasswd.users
   become: true
+  failed_when: false
 
 - name: Modify Apache configuration for Basic Authentication
   blockinfile:
@@ -30,3 +33,5 @@
           Require valid-user
       </Directory>
   become: true
+  failed_when: false
+

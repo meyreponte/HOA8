@@ -4,14 +4,14 @@
     name: "{{ item }}"
     state: present
   loop:
-    - nagios4
+    - nagios3
     - nagios-nrpe-plugin
     - nagios-plugins-contrib
     - nagios-plugins
 
 - name: Enable and start Nagios (Ubuntu)
   systemd:
-    name: nagios4
+    name: nagios3
     enabled: yes
     state: started
   when: ansible_distribution == "Ubuntu"
